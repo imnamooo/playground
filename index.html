@@ -3,349 +3,248 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f7f5">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="description" content="imnamooo — ideas, work, and everything in between.">
-  <title>imnamooo — playground</title>
+  <meta name="theme-color" content="#f3f2ed">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="imnamooo — a personal index of work, notes, and things worth keeping.">
+  <title>IMNAMOOO® — Personal Index</title>
   <style>
     :root {
       color-scheme: light;
-      --paper: #f7f7f5;
-      --ink: #090909;
-      --soft: #777773;
-      --line: rgba(9,9,9,.16);
-      --serif: Georgia, "Times New Roman", serif;
+      --paper: #f3f2ed;
+      --ink: #161616;
+      --muted: #777770;
+      --line: rgba(22,22,22,.22);
+      --accent: #f14b32;
+      --pad: clamp(18px, 3vw, 46px);
       font-family: Arial, Helvetica, system-ui, sans-serif;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
     }
     * { box-sizing: border-box; }
     html { background: var(--paper); scroll-behavior: smooth; }
-    body { margin: 0; background: var(--paper); color: var(--ink); }
+    body { margin: 0; color: var(--ink); background: var(--paper); }
     a { color: inherit; }
     button { color: inherit; font: inherit; }
-    .site { min-height: 100svh; overflow: clip; position: relative; }
-    .masthead {
-      position: absolute; inset: 0 0 auto; z-index: 5;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 24px 34px; font-size: 11px; letter-spacing: .08em;
+    .page { min-height: 100svh; overflow: clip; }
+    .topbar {
+      min-height: 53px; padding: 0 var(--pad); display: grid;
+      grid-template-columns: 1fr 1fr 1fr; align-items: center;
+      border-bottom: 1px solid var(--line); font-size: 10px;
+      letter-spacing: .09em; text-transform: uppercase;
+    }
+    .brand { font-weight: 800; letter-spacing: -.04em; text-decoration: none; }
+    .top-center { text-align: center; color: var(--muted); }
+    .top-right { justify-self: end; display: flex; gap: 20px; }
+    .top-right a { text-decoration: none; }
+    .top-right a:hover { color: var(--accent); }
+    .hero {
+      position: relative; min-height: min(790px, calc(100svh - 53px));
+      padding: 0 var(--pad) 26px; display: grid; grid-template-rows: 1fr auto;
+      isolation: isolate;
+    }
+    .hero::before {
+      content: ""; position: absolute; z-index: -1; inset: 0 var(--pad);
+      background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+      background-size: calc((100% - 1px) / 12) 100%; opacity: .3;
+    }
+    .hero-main { display: flex; flex-direction: column; justify-content: center; padding: 70px 0 45px; }
+    .kicker { display: flex; align-items: center; gap: 9px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .kicker::before { content: ""; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+    h1 {
+      margin: 26px 0 0; font-size: clamp(78px, 16.2vw, 240px);
+      line-height: .72; letter-spacing: -.105em; font-weight: 800;
       text-transform: uppercase;
     }
-    .wordmark { text-decoration: none; font-weight: 700; letter-spacing: -.04em; font-size: 14px; }
-    .mast-meta { display: flex; gap: 26px; color: var(--soft); }
-    .menu-toggle { border: 0; padding: 7px 0 7px 10px; background: transparent; cursor: pointer; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
-    .menu-toggle span { display: inline-block; width: 7px; height: 7px; margin-left: 7px; border: 1px solid currentColor; border-radius: 50%; transition: background .25s, transform .25s; }
-    .menu-toggle[aria-expanded="true"] span { background: var(--ink); transform: scale(1.25); }
-    .hero {
-      min-height: 100svh; position: relative; display: grid; place-items: center;
-      isolation: isolate; padding: 78px 24px 114px;
-      --pointer-x: 0px; --pointer-y: 0px;
+    h1 span { display: block; }
+    h1 span + span { margin-left: 15.7vw; }
+    .hero-caption {
+      display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px;
+      align-items: end; margin-top: 42px; font-size: 11px; line-height: 1.55;
     }
-    .portrait {
-      position: absolute; z-index: -1; top: 5%; left: 50%;
-      width: min(43vw, 570px); height: min(77vh, 810px);
-      transform: translate3d(calc(-50% + var(--pointer-x)), var(--pointer-y), 0);
-      transition: transform .42s cubic-bezier(.2,.7,.2,1);
-      pointer-events: none;
+    .caption-main { grid-column: 1 / span 3; max-width: 220px; }
+    .caption-note { grid-column: 5 / span 3; color: var(--muted); max-width: 220px; }
+    .caption-coord { grid-column: 10 / span 3; justify-self: end; text-align: right; color: var(--muted); }
+    .hero-bottom { border-top: 1px solid var(--line); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .scroll-link { text-decoration: none; color: var(--ink); }
+    .scroll-link:hover { color: var(--accent); }
+    .section { padding: 20px var(--pad) 105px; }
+    .section-head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; padding: 11px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .section-head span:first-child { grid-column: span 4; }
+    .section-head span:last-child { grid-column: span 8; text-align: right; color: var(--muted); }
+    .section-title { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 20px; padding: 42px 0 70px; }
+    .section-title h2 { margin: 0; font-size: clamp(54px, 10.5vw, 148px); line-height: .77; letter-spacing: -.095em; font-weight: 750; }
+    .section-title p { margin: 0 0 5px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .index-list { border-top: 1px solid var(--ink); }
+    .index-link {
+      min-height: 96px; display: grid; grid-template-columns: 70px minmax(0, 1fr) 100px 24px;
+      align-items: center; gap: 16px; border-bottom: 1px solid var(--line); text-decoration: none;
     }
-    .portrait img {
-      display: block; width: 100%; height: 100%; object-fit: contain; object-position: center top;
-      filter: grayscale(1) contrast(1.06);
-      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 98%);
-      mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 98%);
-    }
-    .hero-copy { width: min(100%, 1450px); position: relative; z-index: 1; }
-    .headline {
-      margin: 0; font-size: clamp(74px, 14.3vw, 218px); font-weight: 750;
-      line-height: .74; letter-spacing: -.095em; text-transform: lowercase;
-    }
-    .headline-row { display: block; width: max-content; max-width: 100%; }
-    .headline-row:first-child { position: relative; }
-    .headline-row:last-child { margin-left: clamp(34px, 14vw, 225px); margin-top: .12em; }
-    .headline-word { display: inline-block; outline: none; transition: letter-spacing .35s cubic-bezier(.2,.7,.2,1), transform .35s; }
-    .headline-word:hover, .headline-word:focus-visible { letter-spacing: -.075em; transform: translateY(-.035em); }
-    .eyebrow {
-      display: flex; align-items: center; gap: 10px; margin: 27px 0 0 7px;
-      color: var(--soft); font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
-    }
-    .eyebrow::before { content: ""; width: 23px; height: 1px; background: currentColor; }
-    .hero-bottom {
-      position: absolute; inset: auto 34px 26px; z-index: 2;
-      display: grid; grid-template-columns: 1fr 1.1fr 1fr; align-items: end; gap: 20px;
-    }
-    .hero-note { max-width: 260px; font-size: 11px; line-height: 1.5; color: var(--soft); }
-    .hero-note strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
-    .scroll-cue { justify-self: center; display: flex; align-items: center; gap: 10px; color: var(--soft); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
-    .scroll-cue i { width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; font-style: normal; animation: nudge 1.8s ease-in-out infinite; }
-    .socials { display: flex; justify-content: end; gap: 19px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
-    .socials a { text-decoration: none; border-bottom: 1px solid transparent; padding-bottom: 4px; }
-    .socials a:hover { border-color: currentColor; }
-    .whisper {
-      position: fixed; z-index: 20; left: 0; top: 0; pointer-events: none;
-      padding: 8px 11px; border-radius: 2px; color: var(--paper); background: var(--ink);
-      font-size: 10px; letter-spacing: .03em; opacity: 0; transform: translate(14px, 16px) translateY(5px);
-      transition: opacity .16s, transform .16s; white-space: nowrap;
-    }
-    .whisper.is-visible { opacity: 1; transform: translate(14px, 16px); }
-    .rail {
-      position: fixed; z-index: 8; top: 50%; right: 17px; transform: translateY(-50%);
-      display: flex; flex-direction: column; align-items: end; gap: 7px;
-    }
-    .rail button {
-      display: flex; align-items: center; gap: 10px; border: 0; background: transparent;
-      padding: 8px 5px; cursor: pointer; color: var(--soft); font-size: 9px;
-      letter-spacing: .1em; text-transform: uppercase; transition: color .2s;
-    }
-    .rail button::after { content: ""; width: 5px; height: 5px; border: 1px solid currentColor; border-radius: 50%; transition: background .2s, transform .2s; }
-    .rail button:hover, .rail button[aria-expanded="true"] { color: var(--ink); }
-    .rail button[aria-expanded="true"]::after { background: currentColor; transform: scale(1.25); }
+    button.index-link { width: 100%; padding: 0; border-left: 0; border-right: 0; border-top: 0; border-radius: 0; background: transparent; text-align: left; cursor: pointer; }
+    .index-number, .index-kind { font-size: 9px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+    .index-name { font-size: clamp(25px, 4.5vw, 58px); line-height: .95; letter-spacing: -.065em; font-weight: 600; }
+    .index-kind { justify-self: end; }
+    .index-arrow { font-size: 18px; text-align: right; }
+    .index-link:hover .index-name, .index-link:focus-visible .index-name { color: var(--accent); }
+    .index-link:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .about-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; padding: 91px 0 95px; border-bottom: 1px solid var(--line); }
+    .about-label { grid-column: 1 / span 3; font-size: 9px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+    .about-copy { grid-column: 5 / span 6; max-width: 610px; }
+    .about-copy h2 { margin: -8px 0 25px; font-size: clamp(44px, 7vw, 92px); line-height: .86; letter-spacing: -.085em; }
+    .about-copy p { max-width: 470px; margin: 0; font-size: clamp(14px, 1.5vw, 18px); line-height: 1.7; word-break: keep-all; }
+    .about-mark { grid-column: 12; justify-self: end; align-self: end; font-size: 14px; color: var(--accent); }
+    .contact { padding: 80px 0 50px; }
+    .contact-title { margin: 0 0 60px; font-size: clamp(55px, 11.3vw, 158px); line-height: .77; letter-spacing: -.1em; }
+    .contact-links { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; border-top: 1px solid var(--ink); }
+    .contact-links a { grid-column: span 4; display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-size: 14px; }
+    .contact-links a:hover { color: var(--accent); }
+    .footer { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); padding: 14px 0 0; color: var(--muted); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .footer a { color: var(--ink); text-decoration: none; }
+    .footer a:hover { color: var(--accent); }
     .drawer {
-      position: fixed; z-index: 7; inset: 0 0 0 auto; width: min(440px, 100%);
-      padding: 34px 39px 30px; display: flex; flex-direction: column;
-      background: var(--paper); border-left: 1px solid var(--line);
-      transform: translateX(102%); visibility: hidden;
-      transition: transform .48s cubic-bezier(.75,0,.2,1), visibility .48s;
+      position: fixed; z-index: 10; inset: 0 0 0 auto; width: min(520px, 100%);
+      display: flex; flex-direction: column; padding: 20px var(--pad) 25px;
+      background: var(--paper); border-left: 1px solid var(--ink);
+      transform: translateX(101%); visibility: hidden;
+      transition: transform .35s ease, visibility .35s;
     }
     .drawer.is-open { transform: translateX(0); visibility: visible; }
-    .drawer-top { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 20px; border-bottom: 1px solid var(--line); }
-    .drawer-index { font-size: 10px; color: var(--soft); letter-spacing: .14em; text-transform: uppercase; }
-    .close-panel { border: 0; background: transparent; padding: 8px; cursor: pointer; font-size: 20px; line-height: 1; }
-    .panel-content { flex: 1; padding-top: 11vh; }
-    .panel-kicker { color: var(--soft); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
-    .panel-content h2 { margin: 22px 0 24px; font-size: clamp(44px, 7vw, 74px); line-height: .9; letter-spacing: -.075em; font-weight: 700; }
-    .panel-content p { max-width: 310px; font-size: 14px; line-height: 1.8; color: #555550; word-break: keep-all; }
-    .panel-list { margin-top: 42px; border-top: 1px solid var(--line); }
-    .panel-link {
-      display: flex; justify-content: space-between; align-items: center; gap: 14px;
-      padding: 15px 0; border-bottom: 1px solid var(--line); text-decoration: none;
-      font-size: 13px; transition: padding .25s;
+    .drawer-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .close-button { border: 1px solid var(--ink); background: transparent; padding: 9px 12px; cursor: pointer; font-size: 10px; text-transform: uppercase; }
+    .close-button:hover { color: var(--paper); background: var(--ink); }
+    .drawer-content { flex: 1; padding-top: 16vh; }
+    .drawer-kicker { color: var(--muted); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+    .drawer-content h2 { margin: 24px 0; font-size: clamp(58px, 9vw, 108px); line-height: .78; letter-spacing: -.09em; }
+    .drawer-content p { max-width: 360px; font-size: 15px; line-height: 1.7; word-break: keep-all; }
+    .drawer-content a { display: inline-block; margin-top: 20px; font-size: 11px; text-underline-offset: 4px; }
+    .drawer-footer { border-top: 1px solid var(--line); padding-top: 12px; color: var(--muted); font-size: 9px; letter-spacing: .08em; }
+    @media (max-width: 700px) {
+      .topbar { grid-template-columns: 1fr auto; min-height: 48px; }
+      .top-center { display: none; }
+      .top-right { gap: 13px; font-size: 9px; }
+      .hero { min-height: min(760px, calc(100svh - 48px)); padding-bottom: 17px; }
+      .hero::before { background-size: calc((100% - 1px) / 6) 100%; }
+      .hero-main { padding: 54px 0 35px; }
+      h1 { font-size: clamp(65px, 17.5vw, 122px); line-height: .78; letter-spacing: -.105em; }
+      h1 span + span { margin-left: 8vw; }
+      .hero-caption { grid-template-columns: repeat(6, 1fr); margin-top: 33px; font-size: 10px; }
+      .caption-main { grid-column: 1 / span 3; }
+      .caption-note { grid-column: 4 / span 3; }
+      .caption-coord { display: none; }
+      .hero-bottom { font-size: 8px; }
+      .section { padding-bottom: 72px; }
+      .section-head { grid-template-columns: repeat(6, 1fr); }
+      .section-head span:first-child { grid-column: span 2; }
+      .section-head span:last-child { grid-column: span 4; }
+      .section-title { align-items: start; grid-template-columns: 1fr; padding: 32px 0 50px; }
+      .section-title h2 { font-size: clamp(54px, 14vw, 94px); }
+      .section-title p { max-width: 240px; }
+      .index-link { min-height: 78px; grid-template-columns: 39px minmax(0, 1fr) 48px 16px; gap: 8px; }
+      .index-name { font-size: clamp(22px, 7vw, 38px); }
+      .index-kind { font-size: 8px; }
+      .about-grid { grid-template-columns: repeat(6, 1fr); padding: 64px 0; }
+      .about-label { grid-column: 1 / span 2; }
+      .about-copy { grid-column: 3 / span 4; }
+      .about-copy h2 { font-size: clamp(43px, 12vw, 72px); }
+      .about-copy p { font-size: 14px; }
+      .about-mark { display: none; }
+      .contact { padding: 60px 0 38px; }
+      .contact-title { font-size: clamp(53px, 14vw, 100px); margin-bottom: 42px; }
+      .contact-links { grid-template-columns: repeat(6, 1fr); }
+      .contact-links a { grid-column: span 6; font-size: 13px; }
+      .footer { flex-direction: column; gap: 9px; }
+      .drawer { padding-top: 14px; }
+      .drawer-content { padding-top: 10vh; }
     }
-    .panel-link:hover { padding-left: 8px; }
-    .panel-link span:last-child { color: var(--soft); font-size: 11px; }
-    .panel-footer { padding-top: 18px; border-top: 1px solid var(--line); color: var(--soft); font-size: 10px; }
-    .below { padding: 76px 34px 27px; border-top: 1px solid var(--line); }
-    .below-head { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-bottom: 85px; }
-    .below h2 { margin: 0; font-size: clamp(43px, 9vw, 112px); line-height: .82; letter-spacing: -.085em; font-weight: 700; }
-    .below-head p { max-width: 190px; color: var(--soft); font-size: 11px; line-height: 1.6; }
-    .index-row {
-      display: grid; grid-template-columns: 70px 1fr auto; align-items: baseline; gap: 22px;
-      padding: 18px 0; border-top: 1px solid var(--line); text-decoration: none;
-    }
-    .index-row .num { color: var(--soft); font-size: 10px; letter-spacing: .12em; }
-    .index-row .title { font-size: clamp(24px, 4.1vw, 53px); letter-spacing: -.06em; transition: padding .25s; }
-    .index-row:hover .title { padding-left: 12px; }
-    .index-row .arrow { color: var(--soft); font-size: 13px; }
-    .site-footer {
-      padding: 35px 34px 24px; display: flex; justify-content: space-between; gap: 18px;
-      border-top: 1px solid var(--line); color: var(--soft); font-size: 10px; letter-spacing: .04em;
-    }
-    .site-footer a { color: var(--ink); text-decoration: none; }
-    .site-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
-    @keyframes nudge { 50% { transform: translateY(3px); } }
-    @media (max-width: 760px) {
-      .masthead { padding: 19px 18px; }
-      .mast-meta { display: none; }
-      .hero { min-height: 88svh; padding: 95px 18px 130px; }
-      .portrait { top: 10%; width: min(82vw, 430px); height: 64vh; }
-      .headline { font-size: clamp(61px, 16.4vw, 126px); line-height: .78; letter-spacing: -.09em; }
-      .headline-row:last-child { margin-left: 8vw; margin-top: .16em; }
-      .eyebrow { margin-top: 25px; font-size: 9px; }
-      .hero-bottom { inset: auto 18px 20px; grid-template-columns: 1fr 1fr; gap: 16px; }
-      .hero-note { font-size: 10px; max-width: 220px; }
-      .scroll-cue { display: none; }
-      .socials { flex-direction: column; align-items: end; gap: 8px; font-size: 9px; }
-      .rail { top: auto; right: 50%; bottom: 15px; transform: translateX(50%); flex-direction: row; gap: 4px; padding: 5px 7px; background: rgba(247,247,245,.94); border: 1px solid var(--line); border-radius: 3px; }
-      .rail button { padding: 8px 6px; font-size: 8px; gap: 5px; }
-      .rail button::after { width: 4px; height: 4px; }
-      .drawer { inset: auto 0 0; width: 100%; height: min(78svh, 650px); padding: 20px 21px 28px; border-left: 0; border-top: 1px solid var(--line); transform: translateY(102%); }
-      .drawer.is-open { transform: translateY(0); }
-      .panel-content { padding-top: 6vh; }
-      .panel-content h2 { font-size: 56px; }
-      .panel-content p { font-size: 13px; }
-      .panel-list { margin-top: 25px; }
-      .below { padding: 54px 18px 20px; }
-      .below-head { align-items: start; flex-direction: column; margin-bottom: 50px; }
-      .below-head p { margin: 0; }
-      .index-row { grid-template-columns: 39px 1fr auto; gap: 11px; padding: 15px 0; }
-      .index-row .title { font-size: clamp(25px, 8vw, 42px); }
-      .site-footer { padding: 24px 18px; flex-direction: column; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
-<div class="site">
-  <header class="masthead">
-    <a class="wordmark" href="#top">IMNAMOOO®</a>
-    <div class="mast-meta"><span>Personal index</span><span>2026—∞</span></div>
-    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="pageDrawer">Open index <span></span></button>
-  </header>
+  <div class="page" id="top">
+    <header class="topbar">
+      <a class="brand" href="#top">IMNAMOOO®</a>
+      <span class="top-center">Personal Index · 2026</span>
+      <nav class="top-right" aria-label="Social links">
+        <a href="https://www.instagram.com/imnamooo/" target="_blank" rel="noreferrer">Instagram ↗</a>
+        <a href="https://www.linkedin.com/in/%ED%95%9C%EB%B9%88-%EC%9E%84-178115221/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      </nav>
+    </header>
 
-  <main>
-    <section class="hero" id="top" aria-label="imnamooo home">
-      <div class="portrait" id="portrait"><img src="portrait.png" alt="Hanbin Im, side profile portrait"></div>
-      <div class="hero-copy">
-        <h1 class="headline">
-          <span class="headline-row"><span class="headline-word" tabindex="0" data-whisper="반가워요. 임한빈의 개인 아카이브예요.">imnamooo</span></span>
-          <span class="headline-row"><span class="headline-word" tabindex="0" data-whisper="생각과 결과물을 모아가는 playground.">playground</span></span>
-        </h1>
-        <p class="eyebrow">A home for things I make &amp; find</p>
-      </div>
-      <div class="hero-bottom">
-        <p class="hero-note"><strong>Im Hanbin / 임한빈</strong>작은 관심들을 모으고, 쓸모 있는 형태로 만들어갑니다.</p>
-        <a class="scroll-cue" href="#index"><span>Scroll to explore</span><i>↓</i></a>
-        <nav class="socials" aria-label="Social links">
-          <a href="https://www.instagram.com/imnamooo/" target="_blank" rel="noreferrer">Instagram ↗</a>
-          <a href="https://www.linkedin.com/in/%ED%95%9C%EB%B9%88-%EC%9E%84-178115221/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-        </nav>
-      </div>
-    </section>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-main">
+          <div class="kicker">A personal index / Seoul, Korea</div>
+          <h1 id="hero-title"><span>Im</span><span>Namooo</span></h1>
+          <div class="hero-caption">
+            <div class="caption-main">임한빈<br>Things I make, notice, and keep.</div>
+            <div class="caption-note">작은 관심을 모아 쓸모 있는 형태로 만들어갑니다.</div>
+            <div class="caption-coord">37° 33′ N<br>126° 58′ E</div>
+          </div>
+        </div>
+        <div class="hero-bottom"><span>Independent personal archive</span><a class="scroll-link" href="#index">Scroll to explore ↓</a><span>01 — 04</span></div>
+      </section>
 
-    <section class="below" id="index">
-      <div class="below-head"><h2>An open<br>collection.</h2><p>아직 완성되지 않은 페이지예요.<br>관심사와 작업을 하나씩 더해갈게요.</p></div>
-      <a class="index-row" href="#" data-open-panel="about"><span class="num">01 / ME</span><span class="title">About this space</span><span class="arrow">↗</span></a>
-      <a class="index-row" href="#" data-open-panel="projects"><span class="num">02 / MAKE</span><span class="title">Selected works</span><span class="arrow">↗</span></a>
-      <a class="index-row" href="#" data-open-panel="notes"><span class="num">03 / THINK</span><span class="title">Notes &amp; fragments</span><span class="arrow">↗</span></a>
-    </section>
-  </main>
+      <section class="section" id="index" aria-labelledby="index-title">
+        <div class="section-head"><span>Index / 01</span><span>Work · Notes · About</span></div>
+        <div class="section-title"><h2 id="index-title">An open<br>collection.</h2><p>관심사와 결과물을 하나씩 모아가는 개인 아카이브입니다.</p></div>
+        <div class="index-list">
+          <a class="index-link" href="#about"><span class="index-number">01</span><span class="index-name">About</span><span class="index-kind">Profile</span><span class="index-arrow">↘</span></a>
+          <button class="index-link" type="button" data-panel="works" aria-label="Selected works 소개 패널 열기"><span class="index-number">02</span><span class="index-name">Selected works</span><span class="index-kind">Projects</span><span class="index-arrow">↗</span></button>
+          <button class="index-link" type="button" data-panel="notes" aria-label="Notes and fragments 소개 패널 열기"><span class="index-number">03</span><span class="index-name">Notes &amp; fragments</span><span class="index-kind">Journal</span><span class="index-arrow">↗</span></button>
+          <a class="index-link" href="#contact"><span class="index-number">04</span><span class="index-name">Contact</span><span class="index-kind">Elsewhere</span><span class="index-arrow">↘</span></a>
+        </div>
 
-  <footer class="site-footer">
-    <span>© 2026 IMNAMOOO — MADE TO KEEP GROWING</span>
-    <span><a href="https://github.com/imnamooo/playground" target="_blank" rel="noreferrer">GitHub ↗</a></span>
-  </footer>
+        <div class="about-grid" id="about">
+          <div class="about-label">About / 01</div>
+          <div class="about-copy"><h2>A place for<br>what comes next.</h2><p>안녕하세요, 임한빈입니다. 이곳은 제가 만드는 것과 발견하는 것, 그리고 그 사이의 생각을 모아두는 공간입니다. 천천히 채워갑니다.</p></div>
+          <span class="about-mark">✳</span>
+        </div>
 
-  <nav class="rail" id="pageRail" aria-label="Page index">
-    <button type="button" data-panel="about" aria-expanded="false">01 About</button>
-    <button type="button" data-panel="projects" aria-expanded="false">02 Works</button>
-    <button type="button" data-panel="notes" aria-expanded="false">03 Notes</button>
-    <button type="button" data-panel="links" aria-expanded="false">04 Links</button>
-  </nav>
+        <section class="contact" id="contact" aria-labelledby="contact-title">
+          <div class="section-head"><span>Contact / 04</span><span>Find me elsewhere</span></div>
+          <h2 class="contact-title" id="contact-title">Let’s stay<br>in touch.</h2>
+          <div class="contact-links">
+            <a href="https://www.instagram.com/imnamooo/" target="_blank" rel="noreferrer"><span>Instagram</span><span>↗</span></a>
+            <a href="https://www.linkedin.com/in/%ED%95%9C%EB%B9%88-%EC%9E%84-178115221/" target="_blank" rel="noreferrer"><span>LinkedIn</span><span>↗</span></a>
+            <a href="https://github.com/imnamooo/playground" target="_blank" rel="noreferrer"><span>GitHub</span><span>↗</span></a>
+          </div>
+        </section>
+        <footer class="footer"><span>© 2026 IMNAMOOO®</span><a href="#top">Back to top ↑</a><span>Made to keep growing</span></footer>
+      </section>
+    </main>
 
-  <aside class="drawer" id="pageDrawer" aria-hidden="true" aria-label="Page panel">
-    <div class="drawer-top"><span class="drawer-index" id="panelIndex">01 / ABOUT</span><button class="close-panel" id="closePanel" aria-label="Close panel">×</button></div>
-    <div class="panel-content" id="panelContent" tabindex="-1"></div>
-    <div class="panel-footer">IMNAMOOO® &nbsp; · &nbsp; PERSONAL INDEX &nbsp; · &nbsp; 2026</div>
-  </aside>
-  <div class="whisper" id="whisper" role="status" aria-live="polite"></div>
-</div>
-<script>
-  const panels = {
-    about: {
-      index: "01 / ABOUT",
-      kicker: "A LITTLE INTRODUCTION",
-      title: "About<br>this space.",
-      body: "안녕하세요, 임한빈입니다. 이곳은 제가 만드는 것과 발견하는 것, 그리고 그 사이의 생각들을 모아두는 개인 허브예요. 페이지는 천천히 채워집니다.",
-      links: [["Instagram", "https://www.instagram.com/imnamooo/"], ["LinkedIn", "https://www.linkedin.com/in/%ED%95%9C%EB%B9%88-%EC%9E%84-178115221/"]]
-    },
-    projects: {
-      index: "02 / WORKS",
-      kicker: "THINGS MADE WITH INTENTION",
-      title: "Selected<br>works.",
-      body: "진행한 프로젝트와 결과물을 모아둘 자리예요. 하나씩 정리해 이곳에 추가할게요.",
-      links: [["GitHub playground", "https://github.com/imnamooo/playground"]]
-    },
-    notes: {
-      index: "03 / NOTES",
-      kicker: "THOUGHTS IN PROGRESS",
-      title: "Notes &<br>fragments.",
-      body: "아직 이름 붙이지 못한 생각, 기억하고 싶은 문장, 작업 중 발견한 것들을 위한 공간입니다.",
-      links: [["Back to the index", "#index"]]
-    },
-    links: {
-      index: "04 / LINKS",
-      kicker: "FIND ME ELSEWHERE",
-      title: "Around<br>the web.",
-      body: "다른 곳에서 이어지는 기록들.",
-      links: [
-        ["Instagram", "https://www.instagram.com/imnamooo/"],
-        ["LinkedIn", "https://www.linkedin.com/in/%ED%95%9C%EB%B9%88-%EC%9E%84-178115221/"],
-        ["GitHub", "https://github.com/imnamooo/playground"]
-      ]
-    }
-  };
-  const drawer = document.getElementById("pageDrawer");
-  const content = document.getElementById("panelContent");
-  const index = document.getElementById("panelIndex");
-  const railButtons = [...document.querySelectorAll("[data-panel]")];
-  const menuToggle = document.getElementById("menuToggle");
-  const closePanel = document.getElementById("closePanel");
-
-  function closeDrawer() {
-    drawer.classList.remove("is-open");
-    drawer.setAttribute("aria-hidden", "true");
-    menuToggle.setAttribute("aria-expanded", "false");
-    railButtons.forEach(button => button.setAttribute("aria-expanded", "false"));
-  }
-  function openDrawer(name) {
-    const panel = panels[name];
-    if (!panel) return;
-    const alreadyOpen = drawer.classList.contains("is-open") && index.textContent === panel.index;
-    if (alreadyOpen) { closeDrawer(); return; }
-    index.textContent = panel.index;
-    content.innerHTML = '<span class="panel-kicker">' + panel.kicker + '</span><h2>' + panel.title + '</h2><p>' + panel.body + '</p><div class="panel-list">' + panel.links.map(item => '<a class="panel-link" href="' + item[1] + '"' + (item[1].startsWith("http") ? ' target="_blank" rel="noreferrer"' : '') + '><span>' + item[0] + '</span><span>↗</span></a>').join("") + '</div>';
-    drawer.classList.add("is-open");
-    drawer.setAttribute("aria-hidden", "false");
-    menuToggle.setAttribute("aria-expanded", "true");
-    railButtons.forEach(button => button.setAttribute("aria-expanded", String(button.dataset.panel === name)));
-    closePanel.focus({ preventScroll: true });
-  }
-  railButtons.forEach(button => button.addEventListener("click", event => {
-    event.preventDefault();
-    openDrawer(button.dataset.panel);
-  }));
-  document.querySelectorAll("[data-open-panel]").forEach(link => link.addEventListener("click", event => {
-    event.preventDefault();
-    openDrawer(link.dataset.openPanel);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }));
-  menuToggle.addEventListener("click", () => {
-    if (drawer.classList.contains("is-open")) closeDrawer();
-    else openDrawer("about");
-  });
-  closePanel.addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", event => { if (event.key === "Escape") closeDrawer(); });
-  document.addEventListener("pointerdown", event => {
-    if (drawer.classList.contains("is-open") && !drawer.contains(event.target) && !event.target.closest(".rail") && !event.target.closest(".menu-toggle") && !event.target.closest("[data-open-panel]")) closeDrawer();
-  });
-
-  const hero = document.querySelector(".hero");
-  const portrait = document.getElementById("portrait");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  hero.addEventListener("pointermove", event => {
-    if (reducedMotion.matches || event.pointerType !== "mouse") return;
-    const bounds = hero.getBoundingClientRect();
-    const x = ((event.clientX - bounds.left) / bounds.width - .5) * 14;
-    const y = ((event.clientY - bounds.top) / bounds.height - .5) * 9;
-    hero.style.setProperty("--pointer-x", x.toFixed(1) + "px");
-    hero.style.setProperty("--pointer-y", y.toFixed(1) + "px");
-  });
-  hero.addEventListener("pointerleave", () => {
-    hero.style.setProperty("--pointer-x", "0px");
-    hero.style.setProperty("--pointer-y", "0px");
-  });
-
-  const whisper = document.getElementById("whisper");
-  document.querySelectorAll("[data-whisper]").forEach(word => {
-    const reveal = event => {
-      whisper.textContent = word.dataset.whisper;
-      whisper.classList.add("is-visible");
-      if (event && "clientX" in event) {
-        whisper.style.left = Math.min(event.clientX, window.innerWidth - 260) + "px";
-        whisper.style.top = Math.min(event.clientY, window.innerHeight - 46) + "px";
-      } else {
-        const rect = word.getBoundingClientRect();
-        whisper.style.left = Math.min(rect.left + rect.width * .6, window.innerWidth - 260) + "px";
-        whisper.style.top = Math.min(rect.bottom, window.innerHeight - 46) + "px";
-      }
+    <aside class="drawer" id="infoPanel" aria-hidden="true" aria-labelledby="panelTitle">
+      <div class="drawer-head"><span id="panelNumber">02 / WORKS</span><button class="close-button" id="closePanel" type="button">Close ×</button></div>
+      <div class="drawer-content" id="panelContent"></div>
+      <div class="drawer-footer">IMNAMOOO® · PERSONAL INDEX · 2026</div>
+    </aside>
+  </div>
+  <script>
+    const panelData = {
+      works: { number: "02 / WORKS", kicker: "PROJECTS IN PROGRESS", title: "Selected<br>works.", body: "프로젝트와 결과물을 정리해 이곳에 추가할 예정입니다. 현재는 GitHub에서 작업을 볼 수 있어요.", link: "https://github.com/imnamooo/playground", label: "Open GitHub playground ↗" },
+      notes: { number: "03 / NOTES", kicker: "THOUGHTS IN PROGRESS", title: "Notes &<br>fragments.", body: "기억하고 싶은 생각과 작업 중 발견한 것을 차곡차곡 모을 공간입니다. 페이지를 준비하고 있어요.", link: "#index", label: "Back to the index ↓" }
     };
-    word.addEventListener("pointerenter", reveal);
-    word.addEventListener("pointermove", reveal);
-    word.addEventListener("focus", reveal);
-    word.addEventListener("pointerleave", () => whisper.classList.remove("is-visible"));
-    word.addEventListener("blur", () => whisper.classList.remove("is-visible"));
-  });
-</script>
+    const panel = document.getElementById("infoPanel");
+    const panelNumber = document.getElementById("panelNumber");
+    const panelContent = document.getElementById("panelContent");
+    const closePanel = document.getElementById("closePanel");
+    let lastTrigger = null;
+    function closeInfoPanel() {
+      panel.classList.remove("is-open");
+      panel.setAttribute("aria-hidden", "true");
+      if (lastTrigger) lastTrigger.focus();
+    }
+    document.querySelectorAll("[data-panel]").forEach(button => button.addEventListener("click", () => {
+      const data = panelData[button.dataset.panel];
+      if (!data) return;
+      lastTrigger = button;
+      panelNumber.textContent = data.number;
+      panelContent.innerHTML = `<div class="drawer-kicker">${data.kicker}</div><h2 id="panelTitle">${data.title}</h2><p>${data.body}</p><a href="${data.link}">${data.label}</a>`;
+      panel.classList.add("is-open");
+      panel.setAttribute("aria-hidden", "false");
+      closePanel.focus();
+    }));
+    closePanel.addEventListener("click", closeInfoPanel);
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && panel.classList.contains("is-open")) closeInfoPanel(); });
+  </script>
 </body>
 </html>
